@@ -10,6 +10,8 @@ import 'hammerjs';
 import { AppComponent } from './app.component';
 import { MenuComponent } from './menu/menu.component';
 
+import { MatListModule } from '@angular/material/list';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,7 +20,9 @@ import { MenuComponent } from './menu/menu.component';
   imports: [
       BrowserModule,
 
-       BrowserAnimationsModule,
+      MatListModule,
+
+      BrowserAnimationsModule,
       MatToolbarModule,
       FlexLayoutModule
   ],
