@@ -27,6 +27,7 @@
     "font-awesome": "^4.7.0",
     "hammerjs": "^2.0.8",
     "install": "^0.12.1",
+    "node-modules": "^1.0.1",
     "npm": "^6.4.0",
     "rxjs": "^6.0.0",
     "zone.js": "^0.8.26"
