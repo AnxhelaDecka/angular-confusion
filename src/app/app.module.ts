@@ -44,6 +44,11 @@ import { AppRoutingModule } from './app-routing/app-routing.module';
 import { LoginComponent } from './login/login.component';
 
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {MatSliderModule} from '@angular/material/slider';
+
+
+
+
 
 @NgModule({
   declarations: [
@@ -82,7 +87,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     FormsModule,
     ReactiveFormsModule,
 
-    MatProgressSpinnerModule 
+    MatProgressSpinnerModule,
+    MatSliderModule
 
   ],
  
