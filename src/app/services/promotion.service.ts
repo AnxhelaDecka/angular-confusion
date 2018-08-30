@@ -15,15 +15,15 @@ export class PromotionService {
   constructor() {
    
    }
-   getDishes(): Observable<Promotion[]> {
+   getPromotions(): Observable<Promotion[]> {
     return of(PROMOTIONS).pipe(delay(2000));
   }
 
-  getDish(id: number): Observable<Promotion> {
+  getPromotion(id: number): Observable<Promotion> {
     return of(PROMOTIONS.filter((promotion) => (promotion.id === id))[0]).pipe(delay(2000));
   }
 
-  getFeaturedDish(): Observable<Promotion> {
+  getFeaturedPromotion(): Observable<Promotion> {
     return of(PROMOTIONS.filter((promotion) => promotion.featured)[0]).pipe(delay(2000));
   }
 
