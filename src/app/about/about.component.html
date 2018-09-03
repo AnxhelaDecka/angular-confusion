@@ -61,7 +61,7 @@
        fxLayoutGap="10px">
      <mat-list fxFlex *ngIf="leaders">
       <mat-list-item *ngFor="let lead of leaders">
-        <img matListAvatar src={{lead.image}} alt={{lead.name}}>
+        <img matListAvatar src="{{BaseURL + leader.image}}" alt={{leader.name}}>
         <h1 matLine> {{lead.name}} {{lead.abbr}} </h1>
         <p matLine>{{ lead.designation }}</p>
         <p matLine>
