@@ -13,10 +13,14 @@ export class AboutComponent implements OnInit {
     @Inject('BaseURL') private BaseURL) { }
     
   leaders: Leader[];
+  leaderErrMess: string;
+
 
   ngOnInit() {
     this.leaderService.getLeaders()
-    .subscribe(leaders => this.leaders = leaders);  }
+    .subscribe(leaders => this.leaders = leaders,
+      errmess => this.leaderErrMess = <any>errmess.message);
+}
 
   
 
