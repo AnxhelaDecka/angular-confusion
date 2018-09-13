@@ -73,9 +73,7 @@
           <button type="submit" mat-button class="background-primary text-floral-white" [disabled]="commentForm.invalid">Submit</button>
         </form>
 
-        <div [hidden]="dishes || errMess">
-            <mat-spinner></mat-spinner><h4>Loading . . . Please Wait</h4>
-          </div>
+        
       
         </div>
         <div *ngIf="errMess">

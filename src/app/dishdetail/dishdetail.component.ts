@@ -8,6 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Comment } from '../shared/comment';
 
 
+
 @Component({
   selector: 'app-dishdetail',
   templateUrl: './dishdetail.component.html',
@@ -19,27 +20,28 @@ export class DishdetailComponent implements OnInit {
     @ViewChild('ffform') commentFormDirective;
     
     dish: Dish;
+    dishcopy = null;
     dishIds: number[];
     prev: number;
     next: number;
     commentForm: FormGroup;
     comment: Comment;
+    errMess: string;
     formErrors = {
-        'author': '',
-        'comment': ''
+      'author': '',
+      'comment': ''
       };
-    
-      validationMessages = {
-        'author': {
-          'required':      'Author Name is required.',
-          'minlength':     'Author Name must be at least 2 characters long.'
-        },
-        'comment': {
-          'required':      'Comment is required.',
-        },
-      };
-
-      errMess: string;
+    validationMessages = {
+      'author': {
+        'required':      'Author Name is required.',
+        'minlength':     'Author Name must be at least 2 characters long.'
+      },
+      'comment': {
+        'required':      'Comment is required.',
+      },
+    };      
+      
+ 
 
 
     constructor(private dishservice: DishService,
@@ -52,10 +54,11 @@ export class DishdetailComponent implements OnInit {
 
     ngOnInit() {
         this.dishservice.getDishIds().subscribe(dishIds => this.dishIds = dishIds);
-        this.route.params.pipe(switchMap((params: Params) => this.dishservice.getDish(+params['id'])))
-        .subscribe(dish => { this.dish = dish; this.setPrevNext(dish.id); });
-        errmess => this.errMess = <any>errmess.message;  
-          }
+        this.route.params
+        .pipe(switchMap((params: Params) => this.dishservice.getDish(+params['id']))) 
+        .subscribe(dish => { this.dish = dish; this.dishcopy = dish; this.setPrevNext(dish.id); },
+          errmess => { this.dish = null; this.errMess = <any>errmess; });
+    }
         
     setPrevNext(dishId: number) {
         const index = this.dishIds.indexOf(dishId);
@@ -112,7 +115,11 @@ export class DishdetailComponent implements OnInit {
           rating :5,
           comment: ''
         });
+
+        this.dishcopy.comments.push(this.comment);
+        this.dishcopy.save()
+        .subscribe(dish => { this.dish = dish; console.log(this.dish); });
        
       }
     
-    }
+  }
