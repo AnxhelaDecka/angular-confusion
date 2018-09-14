@@ -1,7 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Feedback, ContactType } from '../shared/feedback';
-import { flyInOut } from '../animations/app.animation';
+import{  visibility, flyInOut, expand  } from '../animations/app.animation';
+import { FeedbackService } from '../services/feedback.service';
+import { Observable, of } from 'rxjs';
+import { Restangular, RestangularModule } from '../../../node_modules/ngx-restangular';
 
 
 @Component({
@@ -14,7 +17,8 @@ import { flyInOut } from '../animations/app.animation';
     'style': 'display: block;'
   },
   animations: [
-    flyInOut()
+    flyInOut(),
+    expand()
   ]
 })
 
@@ -25,6 +29,10 @@ export class ContactComponent implements OnInit {
   feedbackForm: FormGroup;
   feedback: Feedback;
   contactType = ContactType;
+  postFeedback:Feedback;
+  ferr: String;
+  submit: Boolean;
+  display: Boolean;
   
   formErrors = {
     'firstname': '',
@@ -54,15 +62,13 @@ export class ContactComponent implements OnInit {
     },
   };
 
-  constructor(private fb: FormBuilder) {
+  constructor(private feedbackservice: FeedbackService,
+    private fb: FormBuilder,) { 
     this.createForm();
   }
-  
-
-
   ngOnInit() {
   }
-
+  
   createForm() {
     this.feedbackForm = this.fb.group({
       firstname: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25)] ],
@@ -77,44 +83,50 @@ export class ContactComponent implements OnInit {
     this.feedbackForm.valueChanges
       .subscribe(data => this.onValueChanged(data));
 
-    this.onValueChanged(); // (re)set validation messages now
+      this.onValueChanged(); //reset form validation messages
 
   }
-    onValueChanged(data?: any) {
-      if (!this.feedbackForm) { return; }
-      const form = this.feedbackForm;
-      for (const field in this.formErrors) {
-        if (this.formErrors.hasOwnProperty(field)) {
-          // clear previous error message (if any)
-          this.formErrors[field] = '';
-          const control = form.get(field);
-          if (control && control.dirty && !control.valid) {
-            const messages = this.validationMessages[field];
-            for (const key in control.errors) {
-              if (control.errors.hasOwnProperty(key)) {
-                this.formErrors[field] += messages[key] + ' ';
-              }
-            }
-          }
+  onValueChanged(data?:any) {
+    if (!this.feedbackForm) {return;}
+    const form = this.feedbackForm;
+    for (const field in this.formErrors){
+      this.formErrors[field]= '';
+      const control = form.get(field);
+      if(control && control.dirty && !control.valid) {
+        const messages = this.validationMessages[field]
+        for(const key in control.errors){
+          this.formErrors[field]+= messages[key] + '';
         }
       }
     }
+  }
 
   
 
   onSubmit() {
-    this.feedback = this.feedbackForm.value;
+    
+    this.submit=true;
+     this.feedback = this.feedbackForm.value;
     console.log(this.feedback);
     this.feedbackForm.reset({
-      firstname: '',
-      lastname: '',
-      telnum: '',
-      email: '',
-      agree: false,
+       firstname: '',
+       lastname: '',
+       telnum: '',
+       email: '',
+       agree: false,
       contacttype: 'None',
       message: ''
     });
-    this.feedbackFormDirective.resetForm();
+     this.feedbackservice.submitFeedback(this.feedback)
+     .subscribe(feedback => { this.postFeedback = feedback; console.log(this.postFeedback); });
+    
+    setTimeout(() => {
+      this.display=true;
+      this.postFeedback=null;
+      this.submit=false;
+      
+    }, 5000);
+    
   }
 
 }
